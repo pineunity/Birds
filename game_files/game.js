@@ -149,6 +149,7 @@ function startGameLoop () {
   }, 1000 / 60);
 }
 
+// Add recovery mode here for the staful migration
 
 exports.startServer = function () {
   io = require('socket.io').listen(Const.SOCKET_PORT);
