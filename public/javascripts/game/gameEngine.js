@@ -42,7 +42,7 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
 
   function state_sync (currentTime, ellapsedTime) {
     // if (_gameState == enumState.Migrating)
-  //  do something here
+  //  do something here - get state info
   }
 
   requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
