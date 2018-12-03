@@ -40,6 +40,11 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
     canvasPainter.draw(currentTime, ellapsedTime, _playerManager, _pipeList, _gameState, _isNight);
   }
 
+  function state_sync (currentTime, ellapsedTime) {
+    // if (_gameState == enumState.Migrating)
+  //  do something here
+  }
+
   requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 
 
