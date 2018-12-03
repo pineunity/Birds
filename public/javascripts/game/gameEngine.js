@@ -7,7 +7,8 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
     Login: 0,
     WaitingRoom: 1,
     OnGame: 2,
-    Ranking: 3
+    Ranking: 3,
+    Migrating: 4
   };
 
   var enumPanels = {
