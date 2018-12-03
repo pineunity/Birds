@@ -51,6 +51,9 @@ function updateGameState (newState, notifyClients) {
     case enums.ServerState.WaitingForPlayers:
       log += 'in lobby waiting for players'
       break;
+    //  case: enums.ServerState.Migrate:
+    //       log += 'Server is migrate'
+    //       break;
     case enums.ServerState.OnGame:
       log += 'in game !'
       break;
