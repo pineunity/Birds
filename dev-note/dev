@@ -1,1 +1,7 @@
 for tracking the state using console in javascript
+
+When the migration is triggered then we need to sync the following parameters:
+- the kind of bird (color)
+- the position of the bird
+- the position of the pipes
+- the background set
