@@ -153,6 +153,11 @@ function startGameLoop () {
       }
     }
 
+    // Add sign here to know when to migrate
+    // if (migration == true){
+    //   gameMigrate()
+    // }
+
     // Notify players
     io.sockets.emit('game_loop_update', { players: _playersManager.getOnGamePlayerList(), pipes: _pipeManager.getPipeList()});
 
