@@ -114,6 +114,7 @@ function gameMigrate(){
 
   // Change server state
   updateGameState(enums.ServerState.Migrating, true);
+  // do something here util the state is back to OnGame
 
   // Transfer the require state to the destination
   updateGameState(enums.ServerState.OnGame, true)
