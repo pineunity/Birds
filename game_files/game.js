@@ -49,17 +49,21 @@ function updateGameState (newState, notifyClients) {
   _gameState = newState;
   switch (_gameState) {
     case enums.ServerState.WaitingForPlayers:
-      log += 'in lobby waiting for players'
+      log += 'in lobby waiting for players';
       break;
     //  case: enums.ServerState.Migrate:
     //       log += 'Server is migrating'
     //       break;
     case enums.ServerState.OnGame:
-      log += 'in game !'
+      log += 'in game !';
       break;
     case enums.ServerState.Ranking:
-      log += 'displaying ranking'
+      log += 'displaying ranking';
       break;
+    case enums.ServerState.Migrating:
+      log += 'migrating';
+      break;
+
     default:
       log += 'dead :p'
   }
@@ -109,9 +113,11 @@ function gameMigrate(){
   //This function will run in the loop, so state would be saved for the each time frame
 
   // Change server state
-    updateGameState(enums.ServerState.Migrating, true)
+  updateGameState(enums.ServerState.Migrating, true);
 
-    // show the time here
+  // Transfer the require state to the destination
+  updateGameState(enums.ServerState.OnGame, true)
+  // show the time here
 
 }
 
@@ -157,7 +163,7 @@ function startGameLoop () {
 
     // Maybe set the timeout for the migration
     // if (migration == true){
-    //   gameMigrate()
+    gameMigrate();
     // }
 
     // Notify players
