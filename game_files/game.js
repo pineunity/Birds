@@ -105,6 +105,14 @@ function gameOver() {
   setTimeout(createNewGame, Const.TIME_BETWEEN_GAMES);
 };
 
+function gameMigrate(){
+  // Change server state
+    updateGameState(enums.ServerState.Migrating, true)
+
+    // show the time here
+
+}
+
 function startGameLoop () {
   // Change server state
   updateGameState(enums.ServerState.OnGame, true);
@@ -135,7 +143,6 @@ function startGameLoop () {
 
     // Update players position
     _playersManager.updatePlayers(ellapsedTime);
-
     // Update pipes
     _pipeManager.updatePipes(ellapsedTime);
 
