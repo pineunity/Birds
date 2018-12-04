@@ -106,6 +106,8 @@ function gameOver() {
 };
 
 function gameMigrate(){
+  //This function will run in the loop, so state would be saved for the each time frame
+
   // Change server state
     updateGameState(enums.ServerState.Migrating, true)
 
