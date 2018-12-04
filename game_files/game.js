@@ -155,7 +155,7 @@ function startGameLoop () {
       }
     }
 
-    // Add sign here to know when to migrate
+    // Maybe set the timeout for the migration
     // if (migration == true){
     //   gameMigrate()
     // }
