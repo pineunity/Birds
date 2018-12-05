@@ -91,11 +91,55 @@ function createNewGame () {
   updateGameState(enums.ServerState.WaitingForPlayers, true);
 };
 
-function gameRecovery(players, state) {
+function gameOver() {
+  var players,
+      i;
 
+  // Stop game loop
+  clearInterval(_timer);
+  _lastTime = null;
+
+  // Change server state
+  updateGameState(enums.ServerState.Ranking, true);
+
+  // Send players score
+  _playersManager.sendPlayerScore();
+
+  // After 5s, create a new game
+  setTimeout(createNewGame, Const.TIME_BETWEEN_GAMES);
+};
+
+
+function gameRecovery(ellapsedTime) {
+    var players,
+        i;
+
+    // Update pipe list
+    _pipeManager.updatePipes(ellapsedTime);
+
+    _playersManager.updatePlayers(ellapsedTime);
+
+    // Reset players state and send it
+    // players = _playersManager.resetPlayersForNewGame();
+    // for (i = 0; i < players.length; i++) {
+    //     io.sockets.emit('player_ready_state', players[i]);
+    // };
+
+    // Notify players of the restored game state
+    updateGameState(enums.ServerState.OnGame, true);
 }
 
-function gameOver() {
+function gameMigrate(ellapsedTime){
+  //This function will run in the loop, so state would be saved for the each time frame
+
+  // Change server state
+  // updateGameState(enums.ServerState.Migrating, true);
+  // do something here util the state is back to OnGame
+
+  // Transfer the require state to the destination
+  // updateGameState(enums.ServerState.OnGame, true)
+  // show the time here
+
   var players,
       i;
 
@@ -111,21 +155,9 @@ function gameOver() {
 
   //First step is to try to make it recover
   //  After 5s, recover the game
-  setTimeout(gameRecovery(), Const.TIME_BETWEEN_GAMES);
+  setTimeout(gameRecovery(ellapsedTime), Const.TIME_BETWEEN_GAMES);
   // After 5s, create a new game
   // setTimeout(createNewGame, Const.TIME_BETWEEN_GAMES);
-};
-
-function gameMigrate(){
-  //This function will run in the loop, so state would be saved for the each time frame
-
-  // Change server state
-  updateGameState(enums.ServerState.Migrating, true);
-  // do something here util the state is back to OnGame
-
-  // Transfer the require state to the destination
-  updateGameState(enums.ServerState.OnGame, true)
-  // show the time here
 
 }
 
@@ -165,14 +197,17 @@ function startGameLoop () {
     // Check collisions
     if (CollisionEngine.checkCollision(_pipeManager.getPotentialPipeHit(), _playersManager.getPlayerList(enums.PlayerState.Playing)) == true) {
       if (_playersManager.arePlayersStillAlive() == false) {
-        gameOver();
+        //gameOver();
+        gameMigrate(ellapsedTime);
       }
     }
 
     // Maybe set the timeout for the migration
     // if (migration == true){
     // Update player position _playersManager.updatePlayers(ellapsedTime);
-    gameMigrate();
+
+    //gameMigrate();
+
     // }
 
     // Notify players
