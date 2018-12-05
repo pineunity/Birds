@@ -91,6 +91,10 @@ function createNewGame () {
   updateGameState(enums.ServerState.WaitingForPlayers, true);
 };
 
+function gameRecovery(players, state) {
+
+}
+
 function gameOver() {
   var players,
       i;
@@ -105,8 +109,11 @@ function gameOver() {
   // Send players score
   _playersManager.sendPlayerScore();
 
+  //First step is to try to make it recover
+  //  After 5s, recover the game
+  setTimeout(gameRecovery(), Const.TIME_BETWEEN_GAMES);
   // After 5s, create a new game
-  setTimeout(createNewGame, Const.TIME_BETWEEN_GAMES);
+  // setTimeout(createNewGame, Const.TIME_BETWEEN_GAMES);
 };
 
 function gameMigrate(){
