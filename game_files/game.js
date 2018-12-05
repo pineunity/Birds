@@ -164,6 +164,7 @@ function startGameLoop () {
 
     // Maybe set the timeout for the migration
     // if (migration == true){
+    // Update player position _playersManager.updatePlayers(ellapsedTime);
     gameMigrate();
     // }
 

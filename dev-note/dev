@@ -5,3 +5,6 @@ When the migration is triggered then we need to sync the following parameters:
 - the position of the bird
 - the position of the pipes
 - the background set
+
+
+- The bird actually does not move, only the background move
