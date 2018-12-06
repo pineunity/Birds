@@ -20,7 +20,7 @@ var constant = {
   MIN_PIPE_HEIGHT:          60,
   MAX_PIPE_HEIGHT:          630,
   HEIGHT_BETWEEN_PIPES:     150,
-  PIP_FOLDER: '/home/flappy_bird/state/pipe.txt',
+  PIPE_FOLDER: '/home/flappy_bird/state/pipe.txt',
   PLAYER_FOLDER: '/home/flappy_bird/state/player.txt'
 };
 
