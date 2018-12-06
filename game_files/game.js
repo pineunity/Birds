@@ -39,7 +39,7 @@ function playerLog (socket, nick) {
 
       // Add Player information here
       var playerObject = player.getPlayerObject();
-      var combPlayerInfo = playerObject.id + '-' + playerObject.nick + '-' +  playerObject.color + String(playerObject.posX) + String(playerObject.posY);
+      var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
       playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
           if (err) console.log(err);
           console.log("Successfully Written to playerManagerFile.");
