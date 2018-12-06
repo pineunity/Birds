@@ -30,7 +30,7 @@ PipeManager.prototype.newPipe = function () {
 
   newPipe = new Pipe(lastPos);
   _pipeList.push(newPipe);
-
+  //Save the lastPos into a file
   return (newPipe);
 };
 

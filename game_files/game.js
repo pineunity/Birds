@@ -118,12 +118,12 @@ function gameRecovery(ellapsedTime) {
     _pipeManager.updatePipes(ellapsedTime);
 
     _playersManager.updatePlayers(ellapsedTime);
-
+    lenPlaysers =_playersManager.getPlayerList(enums.PlayerState.Playing);
     // Reset players state and send it
     // players = _playersManager.resetPlayersForNewGame();
-    // for (i = 0; i < players.length; i++) {
-    //     io.sockets.emit('player_ready_state', players[i]);
-    // };
+    for (i = 0; i < lenPlaysers; i++) {
+        io.sockets.emit('player_ready_state', players[i]);
+    };
 
     // Notify players of the restored game state
     updateGameState(enums.ServerState.OnGame, true);
