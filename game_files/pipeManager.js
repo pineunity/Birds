@@ -6,8 +6,6 @@ var util          = require('util'),
     Const         = require('../sharedConstants').constant;
 
 
-// var pipeManagerFile = new File(Const.PIPE_FOLDER);
-
 var FIRST_PIPE_POSX           = Const.SCREEN_WIDTH + 100;
 var SPAWN_PIPE_ALERT          = Const.SCREEN_WIDTH;
 var MAX_PIPE_CHECK_COLLISION  = 3;
@@ -36,10 +34,7 @@ PipeManager.prototype.newPipe = function () {
   newPipe = new Pipe(lastPos);
   _pipeList.push(newPipe);
   //Save the lastPos into a file
-  // pipeManagerFile.open();
   var combPipeInfo = newPipe.getPipeObject().id + '-' + String(newPipe.getPipeObject().posX) + '-' + String(newPipe.getPipeObject().posY);
-  // pipeManagerFile.writeln(combPipeInfo);
-  // pipeManagerFile.close();
   pipeManagerFile.writeFile(Const.PIPE_FOLDER, combPipeInfo, function(err){
       if (err) console.log(err);
       console.log("Successfully Written to pipeManagerFile.");

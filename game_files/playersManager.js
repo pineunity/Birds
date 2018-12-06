@@ -29,8 +29,8 @@ PlayersManager.prototype.addNewPlayer = function (playerSocket, id) {
   _playersList.push(newPlayer);
 
   console.info('New player connected. There is currently ' + _playersList.length + ' player(s)');
-  // Good news is the players also have data
-
+  // Retrieve information from newPlayer
+  var playInfo = newPlayer._pla
   return (newPlayer);
 };
 
