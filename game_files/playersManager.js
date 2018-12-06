@@ -4,6 +4,7 @@ var util          = require('util'),
     Player        = require('./player'),
     enums         = require('./enums');
 
+
 var NB_AVAILABLE_BIRDS_COLOR = 4;
 
 var _playersList  = new Array(),

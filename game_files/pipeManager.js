@@ -4,9 +4,12 @@ var util          = require('util'),
     enums         = require('./enums'),
     Const         = require('../sharedConstants').constant;
 
+
+
 var FIRST_PIPE_POSX           = Const.SCREEN_WIDTH + 100;
 var SPAWN_PIPE_ALERT          = Const.SCREEN_WIDTH;
 var MAX_PIPE_CHECK_COLLISION  = 3;
+
 
 var _pipeList = new Array(),
     _socket = null;
