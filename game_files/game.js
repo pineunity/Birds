@@ -37,7 +37,7 @@ function playerLog (socket, nick) {
       // Set player's nickname and prepare him for the next game
       _playersManager.prepareNewPlayer(player, nick);
 
-      // Add Player information here
+      // Add Player information here - Update he posX and PosY for migration
       var playerObject = player.getPlayerObject();
       var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
       playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
