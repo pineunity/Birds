@@ -4,7 +4,7 @@ var util          = require('util'),
     Player        = require('./player'),
     enums         = require('./enums');
 
-var pipeManagerFile = new File(Const.PLAYER_FOLDER);
+var playerManagerFile = new File(Const.PLAYER_FOLDER);
 
 var NB_AVAILABLE_BIRDS_COLOR = 4;
 
