@@ -30,7 +30,8 @@ PlayersManager.prototype.addNewPlayer = function (playerSocket, id) {
 
   console.info('New player connected. There is currently ' + _playersList.length + ' player(s)');
   // Retrieve information from newPlayer
-  var playInfo = newPlayer._pla
+  var playInfo = newPlayer.getPlayerObject();
+
   return (newPlayer);
 };
 
