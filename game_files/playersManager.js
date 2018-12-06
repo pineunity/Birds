@@ -3,7 +3,8 @@ var util          = require('util'),
     Scores        = require('./scoreSystem'),
     Player        = require('./player'),
     playerManagerFile   = require('fs'),
-    enums         = require('./enums');
+    enums         = require('./enums'),
+    Const         = require('../sharedConstants').constant;
 
 var NB_AVAILABLE_BIRDS_COLOR = 4;
 
