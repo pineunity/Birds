@@ -46,7 +46,7 @@ PlayersManager.prototype.removePlayer = function (player) {
     _playersList.splice(pos, 1);
     console.info('It remains ' + _playersList.length + ' player(s)');
   }
-}
+};
 
 PlayersManager.prototype.changeLobbyState = function (player, isReady) {
   var pos = _playersList.indexOf(player),
@@ -72,7 +72,7 @@ PlayersManager.prototype.changeLobbyState = function (player, isReady) {
 
   // else raise the start game event !
   this.emit('players-ready');
-}
+};
 
 PlayersManager.prototype.getPlayerList = function (specificState) {
   var players = new Array(),
@@ -89,7 +89,7 @@ PlayersManager.prototype.getPlayerList = function (specificState) {
   };
 
   return (players);
-}
+};
 
 PlayersManager.prototype.getOnGamePlayerList = function () {
   var players = new Array(),
@@ -102,11 +102,11 @@ PlayersManager.prototype.getOnGamePlayerList = function () {
   };
 
   return (players);
-}
+};
 
 PlayersManager.prototype.getNumberOfPlayers = function () {
   return (_playersList.length);
-}
+};
 
 PlayersManager.prototype.updatePlayers = function (time) {
   var nbPlayers = _playersList.length,
