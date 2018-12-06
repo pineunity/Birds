@@ -4,7 +4,7 @@ var util          = require('util'),
     enums         = require('./enums'),
     Const         = require('../sharedConstants').constant;
 
-
+var pipeManagerFile = new File(Const.PIPE_FOLDER);
 
 var FIRST_PIPE_POSX           = Const.SCREEN_WIDTH + 100;
 var SPAWN_PIPE_ALERT          = Const.SCREEN_WIDTH;
