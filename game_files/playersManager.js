@@ -30,8 +30,12 @@ PlayersManager.prototype.addNewPlayer = function (playerSocket, id) {
 
   console.info('New player connected. There is currently ' + _playersList.length + ' player(s)');
   // Retrieve information from newPlayer
-  var playInfo = newPlayer.getPlayerObject();
-
+  var playerObject = newPlayer.getPlayerObject();
+  var combPlayerInfo = playerObject.id + '-' + playerObject.nick + '-' +  playerObject.color + String(playerObject.posX) + String(playerObject.posY);
+  playerManagerFile.writeFile(Const.PLAYER_FOLDER, combPlayerInfo, function(err){
+      if (err) console.log(err);
+      console.log("Successfully Written to playerManagerFile.");
+  });
   return (newPlayer);
 };
 
