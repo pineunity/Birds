@@ -2,9 +2,11 @@ var util          = require('util'),
     EventEmitter  = require('events').EventEmitter,
     Pipe          = require('./pipe'),
     enums         = require('./enums'),
+    pipeManagerFile   = require('fs'),
     Const         = require('../sharedConstants').constant;
 
-var pipeManagerFile = new File(Const.PIPE_FOLDER);
+
+// var pipeManagerFile = new File(Const.PIPE_FOLDER);
 
 var FIRST_PIPE_POSX           = Const.SCREEN_WIDTH + 100;
 var SPAWN_PIPE_ALERT          = Const.SCREEN_WIDTH;
@@ -34,10 +36,14 @@ PipeManager.prototype.newPipe = function () {
   newPipe = new Pipe(lastPos);
   _pipeList.push(newPipe);
   //Save the lastPos into a file
-  pipeManagerFile.open();
+  // pipeManagerFile.open();
   var combPipeInfo = newPipe.getPipeObject().id + '-' + String(newPipe.getPipeObject().posX) + '-' + String(newPipe.getPipeObject().posY);
-  pipeManagerFile.writeln(combPipeInfo);
-  pipeManagerFile.close();
+  // pipeManagerFile.writeln(combPipeInfo);
+  // pipeManagerFile.close();
+  pipeManagerFile.writeFile(Const.PIPE_FOLDER, combPipeInfo, function(err){
+      if (err) console.log(err);
+      console.log("Successfully Written to pipeManagerFile.");
+  });
   return (newPipe);
 };
 

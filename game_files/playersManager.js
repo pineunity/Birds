@@ -2,9 +2,8 @@ var util          = require('util'),
     EventEmitter  = require('events').EventEmitter,
     Scores        = require('./scoreSystem'),
     Player        = require('./player'),
+    playerManagerFile   = require('fs'),
     enums         = require('./enums');
-
-var playerManagerFile = new File(Const.PLAYER_FOLDER);
 
 var NB_AVAILABLE_BIRDS_COLOR = 4;
 
@@ -30,6 +29,7 @@ PlayersManager.prototype.addNewPlayer = function (playerSocket, id) {
   _playersList.push(newPlayer);
 
   console.info('New player connected. There is currently ' + _playersList.length + ' player(s)');
+  // Good news is the players also have data
 
   return (newPlayer);
 };
