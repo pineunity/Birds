@@ -198,8 +198,11 @@ function startGameLoop () {
       gameOver();
     }
 
+    //should update the player to the list here
     // Update players position
     _playersManager.updatePlayers(ellapsedTime);
+
+    // Should update the pip to the list here
     // Update pipes
     _pipeManager.updatePipes(ellapsedTime);
 
