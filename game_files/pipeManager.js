@@ -35,7 +35,7 @@ PipeManager.prototype.newPipe = function () {
   _pipeList.push(newPipe);
   //Save the lastPos into a file
   var combPipeInfo = newPipe.getPipeObject().id + '-' + String(newPipe.getPipeObject().posX) + '-' + String(newPipe.getPipeObject().posY);
-  pipeManagerFile.appendFile(Const.PIPE_FOLDER, combPipeInfo, function(err){
+  pipeManagerFile.appendFile(Const.PIPE_FOLDER, combPipeInfo + '\r\n', function(err){
       if (err) console.log(err);
       console.log("Successfully Written to pipeManagerFile.");
   });
