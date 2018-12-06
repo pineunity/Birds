@@ -2,6 +2,7 @@ var PlayersManager    = require('./playersManager'),
     PipeManager       = require('./pipeManager'),
     CollisionEngine   = require('./collisionEngine'),
     enums             = require('./enums'),
+    playerManagerFile   = require('fs'),
     Const             = require('../sharedConstants').constant;
 
 var _playersManager,
@@ -256,6 +257,14 @@ exports.startServer = function () {
     socket.on('say_hi', function (nick, fn) {
       fn(_gameState, player.getID());
       playerLog(socket, nick);
+    });
+
+    // Add Player information here
+    var playerObject = player.getPlayerObject();
+    var combPlayerInfo = playerObject.id + '-' + playerObject.nick + '-' +  playerObject.color + String(playerObject.posX) + String(playerObject.posY);
+    playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
+        if (err) console.log(err);
+        console.log("Successfully Written to playerManagerFile.");
     });
 
     // Remember PlayerInstance and push it to the player list

@@ -2,7 +2,6 @@ var util          = require('util'),
     EventEmitter  = require('events').EventEmitter,
     Scores        = require('./scoreSystem'),
     Player        = require('./player'),
-    playerManagerFile   = require('fs'),
     enums         = require('./enums'),
     Const         = require('../sharedConstants').constant;
 
@@ -30,13 +29,6 @@ PlayersManager.prototype.addNewPlayer = function (playerSocket, id) {
   _playersList.push(newPlayer);
 
   console.info('New player connected. There is currently ' + _playersList.length + ' player(s)');
-  // Retrieve information from newPlayer
-  var playerObject = newPlayer.getPlayerObject();
-  var combPlayerInfo = playerObject.id + '-' + playerObject.nick + '-' +  playerObject.color + String(playerObject.posX) + String(playerObject.posY);
-  playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
-      if (err) console.log(err);
-      console.log("Successfully Written to playerManagerFile.");
-  });
   return (newPlayer);
 };
 
