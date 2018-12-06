@@ -20,8 +20,8 @@ var constant = {
   MIN_PIPE_HEIGHT:          60,
   MAX_PIPE_HEIGHT:          630,
   HEIGHT_BETWEEN_PIPES:     150,
-  PIPE_FOLDER: '/home/flappy_bird/state/pipe.txt',
-  PLAYER_FOLDER: '/home/flappy_bird/state/player.txt'
+  PIPE_FOLDER: '/home/compute2/flappybird/state/pipe.txt',
+  PLAYER_FOLDER: '/home/compute2/flappybird/state/player.txt'
 };
 
 // To be use by the server part, we have to provide the object with exports
