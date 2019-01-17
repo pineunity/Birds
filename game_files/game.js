@@ -37,13 +37,15 @@ function playerLog (socket, nick) {
       // Set player's nickname and prepare him for the next game
       _playersManager.prepareNewPlayer(player, nick);
 
-      // Add Player information here - Update he posX and PosY for migration
-      var playerObject = player.getPlayerObject();
-      var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
-      playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
-          if (err) console.log(err);
-          console.log("Successfully Written to playerManagerFile.");
-      });
+      // Add Player information here - Update the posX and PosY for migration.
+      //  Update the bird location here is just when starting
+
+      // var playerObject = player.getPlayerObject();
+      // var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
+      // playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
+      //     if (err) console.log(err);
+      //     console.log("Successfully Written to playerManagerFile.");
+      // });
 
       // Notify new client about other players AND notify other about the new one ;)
       socket.emit('player_list', _playersManager.getPlayerList());
@@ -173,7 +175,6 @@ function gameMigrate(ellapsedTime){
 function startGameLoop () {
   // Change server state
   updateGameState(enums.ServerState.OnGame, true);
-
   // Create the first pipe
   _pipeManager.newPipe();
 
@@ -206,11 +207,23 @@ function startGameLoop () {
     // Update pipes
     _pipeManager.updatePipes(ellapsedTime);
 
+    var playerlist = _playersManager.getPlayerList(enums.PlayerState.Playing);
+    // this will only be applied for single player
+    for (var p_i = 0; p_i < playerlist.length; p_i++){
+      nplayer = playerlist[p_i];
+      var playerObject = nplayer.getPlayerObject();
+      var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
+      playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
+          if (err) console.log(err);
+          console.log("Successfully Written to playerManagerFile.");
+      });
+    }
+
     // Check collisions
     if (CollisionEngine.checkCollision(_pipeManager.getPotentialPipeHit(), _playersManager.getPlayerList(enums.PlayerState.Playing)) == true) {
       if (_playersManager.arePlayersStillAlive() == false) {
-        //gameOver();
-        gameMigrate(ellapsedTime);
+        gameOver();
+        //gameMigrate(ellapsedTime);
       }
     }
 
