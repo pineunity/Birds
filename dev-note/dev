@@ -1,5 +1,14 @@
 for tracking the state using console in javascript
 
+
+The stateful migration is performed by the following steps:
+
+- Captured and saved the state
+
+- Sync state between source and destination
+
+- Recovery from the state file
+
 When the migration is triggered then we need to sync the following parameters:
 - the kind of bird (color)
 - the position of the bird
