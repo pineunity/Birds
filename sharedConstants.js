@@ -3,7 +3,7 @@ var constant = {
 
   SERVER_PORT:              4242,
   SOCKET_PORT:              1337,
-  SOCKET_ADDR:              'http://localhost',
+  SOCKET_ADDR:              'http://192.168.0.101',
 
   SCREEN_WIDTH:             900,
   SCREEN_HEIGHT:            768,
@@ -20,8 +20,8 @@ var constant = {
   MIN_PIPE_HEIGHT:          60,
   MAX_PIPE_HEIGHT:          630,
   HEIGHT_BETWEEN_PIPES:     150,
-  PIPE_FOLDER: '/home/compute2/flappybird/state/pipe.txt',
-  PLAYER_FOLDER: '/home/compute2/flappybird/state/player.txt'
+  PIPE_FOLDER: '/home/pine/00-bitbucket_comnets/nokia-mec-service-migration/stateful/state/pipe.txt',
+  PLAYER_FOLDER: '/home/pine/00-bitbucket_comnets/nokia-mec-service-migration/stateful/state/player.txt'
 };
 
 // To be use by the server part, we have to provide the object with exports
