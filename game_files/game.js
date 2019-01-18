@@ -172,124 +172,134 @@ function gameMigrate(ellapsedTime){
 
 }
 
-function startGameLoop () {
-  // Change server state
-  updateGameState(enums.ServerState.OnGame, true);
-  // Create the first pipe
-  _pipeManager.newPipe();
+function startGameLoop_recovery (player_info) {
+    var p_id,
+        p_name,
+        p_color,
+        p_PosX,
+        p_posY;
+    p_id = sp_player[0];
+    p_name = sp_player[1];
+    p_color = sp_player[2];
+    p_PosX = sp_player[3];
+    p_posY = sp_player[4];
+    // Change server state
+    updateGameState(enums.ServerState.OnGame, true);
+    // Create the first pipe
+    _pipeManager.newPipe();
 
-  // Start timer
-  _timer = setInterval(function() {
-    var now = new Date().getTime(),
-        ellapsedTime = 0,
-        plList;
+    // Start timer
+    _timer = setInterval(function() {
+      var now = new Date().getTime(),
+          ellapsedTime = 0,
+          plList;
 
-    // get time difference between the last call and now
-    if (_lastTime) {
-      ellapsedTime = now - _lastTime;
-    }
-    else {
-      _timeStartGame = now;
-    }
-
-    _lastTime = now;
-    
-    // If everyone has quit the game, exit it
-    if (_playersManager.getNumberOfPlayers() == 0) {
-      gameOver();
-    }
-
-    //should update the player to the list here
-    // Update players position
-    _playersManager.updatePlayers(ellapsedTime);
-
-    // Should update the pip to the list here
-    // Update pipes
-    _pipeManager.updatePipes(ellapsedTime);
-
-    var playerlist = _playersManager.getPlayerList(enums.PlayerState.Playing);
-    // this will only be applied for single player
-    for (var p_i = 0; p_i < playerlist.length; p_i++){
-      nplayer = playerlist[p_i];
-      var playerObject = nplayer.getPlayerObject();
-      var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
-      playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
-          if (err) console.log(err);
-          console.log("Successfully Written to playerManagerFile.");
-      });
-    }
-
-    // Check collisions
-    if (CollisionEngine.checkCollision(_pipeManager.getPotentialPipeHit(), _playersManager.getPlayerList(enums.PlayerState.Playing)) == true) {
-      if (_playersManager.arePlayersStillAlive() == false) {
-        gameOver();
-        //gameMigrate(ellapsedTime);
+      // get time difference between the last call and now
+      if (_lastTime) {
+        ellapsedTime = now - _lastTime;
       }
-    }
+      else {
+        _timeStartGame = now;
+      }
 
-    // Maybe set the timeout for the migration
-    // if (migration == true){
-    // Update player position _playersManager.updatePlayers(ellapsedTime);
+      _lastTime = now;
 
-    //gameMigrate();
+      // If everyone has quit the game, exit it
+      if (_playersManager.getNumberOfPlayers() == 0) {
+        gameOver();
+      }
 
-    // }
+      //should update the player to the list here
+      // Update players position
+      _playersManager.updatePlayers(ellapsedTime);
 
-    // Notify players
-    io.sockets.emit('game_loop_update', { players: _playersManager.getOnGamePlayerList(), pipes: _pipeManager.getPipeList()});
+      // Should update the pip to the list here
+      // Update pipes
+      _pipeManager.updatePipes(ellapsedTime);
 
-  }, 1000 / 60);
+      var playerlist = _playersManager.getPlayerList(enums.PlayerState.Playing);
+      // this will only be applied for single player
+      for (var p_i = 0; p_i < playerlist.length; p_i++){
+        nplayer = playerlist[p_i];
+        var playerObject = nplayer.getPlayerObject();
+        var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
+        playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
+            if (err) console.log(err);
+            console.log("Successfully Written to playerManagerFile.");
+        });
+      }
+
+      // Check collisions
+      if (CollisionEngine.checkCollision(_pipeManager.getPotentialPipeHit(), _playersManager.getPlayerList(enums.PlayerState.Playing)) == true) {
+        if (_playersManager.arePlayersStillAlive() == false) {
+          gameOver();
+          //gameMigrate(ellapsedTime);
+        }
+      }
+
+      // Maybe set the timeout for the migration
+      // if (migration == true){
+      // Update player position _playersManager.updatePlayers(ellapsedTime);
+
+      //gameMigrate();
+
+      // }
+
+      // Notify players
+      io.sockets.emit('game_loop_update', { players: _playersManager.getOnGamePlayerList(), pipes: _pipeManager.getPipeList()});
+
+    }, 1000 / 60);
 }
 
 // Add recovery mode here for the staful migration
 
-exports.startServer = function () {
-  io = require('socket.io').listen(Const.SOCKET_PORT);
-  io.configure(function(){
-    io.set('log level', 2);
-  });
-
-  _gameState = enums.ServerState.WaitingForPlayers;
-  
-  // Create playersManager instance and register events
-  _playersManager = new PlayersManager();
-  _playersManager.on('players-ready', function () {
-    startGameLoop();
-  });
-
-  // Create pipe manager and bind event
-  _pipeManager = new PipeManager();
-  _pipeManager.on('need_new_pipe', function () {
-    // Create a pipe and send it to clients
-    var pipe = _pipeManager.newPipe();
-  });
-
-  // On new client connection
-  io.sockets.on('connection', function (socket) {
-
-    // Add new player
-    var player = _playersManager.addNewPlayer(socket, socket.id);
-    
-    // Register to socket events
-    socket.on('disconnect', function () {
-      socket.get('PlayerInstance', function (error, player) {
-        _playersManager.removePlayer(player);
-        socket.broadcast.emit('player_disconnect', player.getPlayerObject());
-        player = null;
-      });
-    });
-    socket.on('say_hi', function (nick, fn) {
-      fn(_gameState, player.getID());
-      playerLog(socket, nick);
-    });
-
-    // Remember PlayerInstance and push it to the player list
-    socket.set('PlayerInstance', player);
-  });
-  
-
-  console.log('Game started and waiting for players on port ' + Const.SOCKET_PORT);
-};
+// exports.startServer = function () {
+//   io = require('socket.io').listen(Const.SOCKET_PORT);
+//   io.configure(function(){
+//     io.set('log level', 2);
+//   });
+//
+//   _gameState = enums.ServerState.WaitingForPlayers;
+//
+//   // Create playersManager instance and register events
+//   _playersManager = new PlayersManager();
+//   _playersManager.on('players-ready', function () {
+//     startGameLoop();
+//   });
+//
+//   // Create pipe manager and bind event
+//   _pipeManager = new PipeManager();
+//   _pipeManager.on('need_new_pipe', function () {
+//     // Create a pipe and send it to clients
+//     var pipe = _pipeManager.newPipe();
+//   });
+//
+//   // On new client connection
+//   io.sockets.on('connection', function (socket) {
+//
+//     // Add new player
+//     var player = _playersManager.addNewPlayer(socket, socket.id);
+//
+//     // Register to socket events
+//     socket.on('disconnect', function () {
+//       socket.get('PlayerInstance', function (error, player) {
+//         _playersManager.removePlayer(player);
+//         socket.broadcast.emit('player_disconnect', player.getPlayerObject());
+//         player = null;
+//       });
+//     });
+//     socket.on('say_hi', function (nick, fn) {
+//       fn(_gameState, player.getID());
+//       playerLog(socket, nick);
+//     });
+//
+//     // Remember PlayerInstance and push it to the player list
+//     socket.set('PlayerInstance', player);
+//   });
+//
+//
+//   console.log('Game started and waiting for players on port ' + Const.SOCKET_PORT);
+// };
 
 
 exports.recoveryServer = function () {
@@ -298,38 +308,27 @@ exports.recoveryServer = function () {
         io.set('log level', 2);
     });
 
-    var p_id,
-        p_name,
-        p_color,
-        p_PosX,
-        p_posY;
     // Read state from file
     // Player info and pipe info
 
     // Create playersManager instance and register events
     _playersManager = new PlayersManager();
 
+
+    // Get player info from file
     var player_list = fs.readFileSync(Const.PLAYER_FOLDER).toString();
 
     lines = player_list.trim().split('\n');
     var lastLine = lines.slice(-1)[0];
     // console.log(lastLine);
     var sp_player = lastLine.split("/");
-    p_id = sp_player[0];
-    p_name = sp_player[1];
-    p_color = sp_player[2];
-    p_PosX = sp_player[3];
-    p_posY = sp_player[4];
-
 
     // _gameState = enums.ServerState.WaitingForPlayers;
 
     //  Load player from file
 
-
-
     _playersManager.on('players-ready', function () {
-        startGameLoop();
+        startGameLoop_recovery(sp_player);  // Currently, new player is initiated in this func
     });
 
     // Create pipe manager and bind event
