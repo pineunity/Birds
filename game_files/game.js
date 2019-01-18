@@ -172,7 +172,7 @@ function gameMigrate(ellapsedTime){
 
 }
 
-function startGameLoop_recovery (player_info) {
+function startGameLoop_recovery (player_info, pipe_info) {
     var p_id,
         p_name,
         p_color,
@@ -322,6 +322,12 @@ exports.recoveryServer = function () {
     var lastLine = lines.slice(-1)[0];
     // console.log(lastLine);
     var sp_player = lastLine.split("/");
+
+    // Read pine info
+    var pipe_info = fs.readFileSync(Const.PIPE_FOLDER).toString();
+    // How many pipes should we take?
+    var pipe_list = pipe_info.trim().split('\n');
+    // console.log(pipe_list);
 
     // _gameState = enums.ServerState.WaitingForPlayers;
 
