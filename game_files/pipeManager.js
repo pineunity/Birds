@@ -42,6 +42,19 @@ PipeManager.prototype.newPipe = function () {
   return (newPipe);
 };
 
+PipeManager.prototype.CallBackPipeList = function (cb_pipe_list){
+  var cbPipe,
+      lastPos = FIRST_PIPE_POSX;
+  var pipeListLen = cb_pipe_list.length;
+  for (var i=0; i<pipeListLen; i++){
+    var pipe_info = cb_pipe_list.split("-");
+    cbPipe = new Pipe(lastPos);
+    cbPipe.setPipe(pipe_info[0], pipe_info[1], pipe_info[2]);
+    _pipeList.push(cbPipe);
+  }
+  return (_pipeList);
+};
+
 PipeManager.prototype.updatePipes = function (time) {
   var nbPipes = _pipeList.length,
       i;

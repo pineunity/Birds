@@ -172,13 +172,15 @@ function gameMigrate(ellapsedTime){
 
 }
 
-function startGameLoop_recovery (pipe_list) {
+function startGameLoop_recovery (cb_pipe_list) {
 
     // Change server state
     updateGameState(enums.ServerState.OnGame, true);
     // Create the first pipe
 
     _pipeManager.newPipe(); // change it
+
+    _pipeManager.CallBackPipeList();
 
     // Start timer
     _timer = setInterval(function() {
@@ -329,7 +331,7 @@ exports.recoveryServer = function () {
     // Read pine info
     var pipe_info = fs.readFileSync(Const.PIPE_FOLDER).toString();
     // How many pipes should we take?
-    var pipe_list = pipe_info.trim().split('\n');
+    var cb_pipe_list = pipe_info.trim().split('\n');
     // console.log(pipe_list);
 
     // _gameState = enums.ServerState.WaitingForPlayers;
@@ -337,7 +339,7 @@ exports.recoveryServer = function () {
     //  Load player from file
 
     _playersManager.on('players-ready', function () {
-        startGameLoop_recovery(player_info, pipe_list);
+        startGameLoop_recovery(cb_pipe_list);
     });
 
     // Create pipe manager and bind event

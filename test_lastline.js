@@ -14,4 +14,5 @@ var pipe_info = fs.readFileSync(Const.PIPE_FOLDER).toString();
 
 var pipe_list = pipe_info.trim().split('\n');
 
-console.log(pipe_list[0]);
+// console.log(pipe_list[0]);
+console.log(pipe_list.length);

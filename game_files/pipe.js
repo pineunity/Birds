@@ -7,6 +7,12 @@ function Pipe (lastPipePosX) {
     posY: Math.floor(Math.random() * ((Const.MAX_PIPE_HEIGHT - Const.HEIGHT_BETWEEN_PIPES)- Const.MIN_PIPE_HEIGHT + 1) + Const.MIN_PIPE_HEIGHT)
   };
 };
+
+Pipe.prototype.setPipe = function (id, posX, posY){
+  this._pipeTinyObject.id = id;
+  this._pipeTinyObject.posX = posX;
+  this._pipeTinyObject.posY = posY;
+};
  
 Pipe.prototype.update = function (timeLapse) {
   this._pipeTinyObject.posX -= Math.floor(timeLapse * Const.LEVEL_SPEED);
