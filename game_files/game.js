@@ -314,14 +314,13 @@ exports.recoveryServer = function () {
     // Create playersManager instance and register events
     _playersManager = new PlayersManager();
 
-
     // Get player info from file
     var player_list = fs.readFileSync(Const.PLAYER_FOLDER).toString();
 
     lines = player_list.trim().split('\n');
     var lastLine = lines.slice(-1)[0];
     // console.log(lastLine);
-    var sp_player = lastLine.split("/");
+    var player_info = lastLine.split("/");
 
     // Read pine info
     var pipe_info = fs.readFileSync(Const.PIPE_FOLDER).toString();
@@ -334,7 +333,7 @@ exports.recoveryServer = function () {
     //  Load player from file
 
     _playersManager.on('players-ready', function () {
-        startGameLoop_recovery(sp_player);  // Currently, new player is initiated in this func
+        startGameLoop_recovery(player_info, pipe_list);  // Currently, new player is initiated in this func
     });
 
     // Create pipe manager and bind event
