@@ -290,3 +290,78 @@ exports.startServer = function () {
 
   console.log('Game started and waiting for players on port ' + Const.SOCKET_PORT);
 };
+
+
+exports.recoveryServer = function () {
+    io = require('socket.io').listen(Const.SOCKET_PORT);
+    io.configure(function(){
+        io.set('log level', 2);
+    });
+
+    var p_id,
+        p_name,
+        p_color,
+        p_PosX,
+        p_posY;
+    // Read state from file
+    // Player info and pipe info
+
+    var player_list = fs.readFileSync(Const.PLAYER_FOLDER).toString();
+
+    lines = player_list.trim().split('\n');
+    var lastLine = lines.slice(-1)[0];
+    // console.log(lastLine);
+    var sp_player = lastLine.split("/");
+    p_id = sp_player[0];
+    p_name = sp_player[1];
+    p_color = sp_player[2];
+    p_PosX = sp_player[3];
+    p_posY = sp_player[4];
+
+
+    // _gameState = enums.ServerState.WaitingForPlayers;
+
+    // Create playersManager instance and register events
+    // _playersManager = new PlayersManager();
+
+    //  Load player from file
+
+
+
+    _playersManager.on('players-ready', function () {
+        startGameLoop();
+    });
+
+    // Create pipe manager and bind event
+    _pipeManager = new PipeManager();
+    _pipeManager.on('need_new_pipe', function () {
+        // Create a pipe and send it to clients
+        var pipe = _pipeManager.newPipe();
+    });
+
+    // On new client connection
+    io.sockets.on('connection', function (socket) {
+
+        // Add new player
+        var player = _playersManager.addNewPlayer(socket, socket.id);
+
+        // Register to socket events
+        socket.on('disconnect', function () {
+            socket.get('PlayerInstance', function (error, player) {
+                _playersManager.removePlayer(player);
+                socket.broadcast.emit('player_disconnect', player.getPlayerObject());
+                player = null;
+            });
+        });
+        socket.on('say_hi', function (nick, fn) {
+            fn(_gameState, player.getID());
+            playerLog(socket, nick);
+        });
+
+        // Remember PlayerInstance and push it to the player list
+        socket.set('PlayerInstance', player);
+    });
+
+
+    console.log('Game started and waiting for players on port ' + Const.SOCKET_PORT);
+};
