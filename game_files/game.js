@@ -172,21 +172,13 @@ function gameMigrate(ellapsedTime){
 
 }
 
-function startGameLoop_recovery (player_info, pipe_info) {
-    var p_id,
-        p_name,
-        p_color,
-        p_PosX,
-        p_posY;
-    p_id = sp_player[0];
-    p_name = sp_player[1];
-    p_color = sp_player[2];
-    p_PosX = sp_player[3];
-    p_posY = sp_player[4];
+function startGameLoop_recovery (pipe_list) {
+
     // Change server state
     updateGameState(enums.ServerState.OnGame, true);
     // Create the first pipe
-    _pipeManager.newPipe();
+
+    _pipeManager.newPipe(); // change it
 
     // Start timer
     _timer = setInterval(function() {
@@ -308,6 +300,12 @@ exports.recoveryServer = function () {
         io.set('log level', 2);
     });
 
+    var p_id,
+        p_name,
+        p_color,
+        p_PosX,
+        p_posY;
+
     // Read state from file
     // Player info and pipe info
 
@@ -322,6 +320,12 @@ exports.recoveryServer = function () {
     // console.log(lastLine);
     var player_info = lastLine.split("/");
 
+    p_id = player_info[0];
+    p_name = player_info[1];
+    p_color = player_info[2];
+    p_PosX = player_info[3];
+    p_posY = player_info[4];
+
     // Read pine info
     var pipe_info = fs.readFileSync(Const.PIPE_FOLDER).toString();
     // How many pipes should we take?
@@ -333,7 +337,7 @@ exports.recoveryServer = function () {
     //  Load player from file
 
     _playersManager.on('players-ready', function () {
-        startGameLoop_recovery(player_info, pipe_list);  // Currently, new player is initiated in this func
+        startGameLoop_recovery(player_info, pipe_list);
     });
 
     // Create pipe manager and bind event
@@ -346,8 +350,8 @@ exports.recoveryServer = function () {
     // On new client connection
     io.sockets.on('connection', function (socket) {
 
-        // Add new player
-        var player = _playersManager.addNewPlayer(socket, socket.id);
+        // Call back player
+        var player = _playersManager.CallBackPlayer(socket, p_id, p_name, p_color, p_PosX, p_posY);
 
         // Register to socket events
         socket.on('disconnect', function () {

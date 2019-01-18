@@ -128,6 +128,18 @@ function Player (socket, uid, color) {
     }
   };
 
+  Player.prototype.setPlayer = function (socket, id, name, bird_color, posX, posY){
+      this._socket = socket;
+      this._speedY    = 0;
+      this._rank      = 1;
+      this._lastPipe  = 0;
+      this._playerTinyObject.id = id;
+      this._playerTinyObject.nick = name;
+      this._playerTinyObject.color = bird_color;
+      this._playerTinyObject.posX = posX;
+      this._playerTinyObject.posY = posY;
+  };
+
   Player.prototype.sendScore = function (NBPlayers, HighScores) {
 
     // Update player best score if he just make a new one !
