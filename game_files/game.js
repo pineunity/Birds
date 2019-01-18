@@ -306,6 +306,9 @@ exports.recoveryServer = function () {
     // Read state from file
     // Player info and pipe info
 
+    // Create playersManager instance and register events
+    _playersManager = new PlayersManager();
+
     var player_list = fs.readFileSync(Const.PLAYER_FOLDER).toString();
 
     lines = player_list.trim().split('\n');
@@ -320,9 +323,6 @@ exports.recoveryServer = function () {
 
 
     // _gameState = enums.ServerState.WaitingForPlayers;
-
-    // Create playersManager instance and register events
-    // _playersManager = new PlayersManager();
 
     //  Load player from file
 
