@@ -180,7 +180,7 @@ function startGameLoop_recovery (cb_pipe_list) {
 
     _pipeManager.newPipe(); // change it
 
-    _pipeManager.CallBackPipeList();
+    _pipeManager.CallBackPipeList(cb_pipe_list);
 
     // Start timer
     _timer = setInterval(function() {
