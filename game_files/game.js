@@ -23,7 +23,8 @@ function playerLog (socket, nick) {
       // Bind new client events
       socket.on('change_ready_state', function (readyState) {
         // If the server is currently waiting for players, update ready state
-        if (_gameState == enums.ServerState.WaitingForPlayers) {
+        if (_gameState == enums.ServerState.OnGame) {
+          //  This line is very imprtant since it will call the GameLoop in the RecoveryGame
           _playersManager.changeLobbyState(player, readyState);
           socket.broadcast.emit('player_ready_state', player.getPlayerObject());
         }
@@ -290,14 +291,17 @@ exports.recoveryServer = function () {
                 player = null;
             });
         });
-        // socket.on('migrated'), function()
+        socket.on('migrated', function(){
+        //    This func will call the playerLog
+            playerLog(socket, player.getNick());
+        });
 
         // Not needed for the state migration
 
-        // socket.on('say_hi', function (nick, fn) {
-        //     fn(_gameState, player.getID());
-        //     playerLog(socket, player.getNick());
-        // });
+        socket.on('say_hi', function (nick, fn) {
+            fn(_gameState, player.getID());
+            playerLog(socket, player.getNick());
+        });
 
         // Remember PlayerInstance and push it to the player list
         socket.set('PlayerInstance', player);
