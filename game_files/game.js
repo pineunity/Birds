@@ -21,12 +21,13 @@ function playerLog (socket, nick) {
     else {
 
       // Bind new client events
-      socket.on('change_migrating_state', function (readyState) {
+      //    It is main func of this game
+      socket.on('change_migrating_state', function () {
           console.log('I am here');
         // If the server is currently waiting for players, update ready state
-        if (_gameState == enums.ServerState.OnGame) {
+        if (_gameState == enums.ServerState.Migrating) {
           //  This line is very imprtant since it will call the GameLoop in the RecoveryGame
-          _playersManager.changeLobbyState(player, readyState);
+          // _playersManager.changeLobbyState(player, readyState);
 
           socket.broadcast.emit('player_ready_state', player.getPlayerObject());
         }
