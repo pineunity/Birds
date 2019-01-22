@@ -291,8 +291,9 @@ exports.recoveryServer = function () {
                 player = null;
             });
         });
-        socket.on('migrated', function(){
-        //    This func will call the playerLog
+        socket.on('migrated', function(fn){
+            fn(_gameState, player.getID());
+            //    This func will call the playerLog
             playerLog(socket, player.getNick());
         });
 

@@ -124,6 +124,8 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
     
   }
 
+  //----------------------------Game recovery---------------------------------------
+
     // This func is used for live migration
     function recoverClient () {
         if (typeof io == 'undefined') {
@@ -169,6 +171,98 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
         });
 
     }
+
+    function recoverGameRoom () {
+        var nick = document.getElementById('player-name').value;
+
+        // If nick is empty or if it has the default value,
+        if ((nick == '') || (nick == 'Player_1')) {
+            infoPanel(true, 'Please choose your <strong>name</strong> !', 2000);
+            document.getElementById('player-name').focus();
+            return (false);
+        }
+        // Else store it in sessionstorage if available
+        else {
+            if (typeof sessionStorage != 'undefined') {
+                sessionStorage.setItem('playerName', nick);
+            }
+        }
+
+        // Unbind button event to prevent "space click"
+        document.getElementById('player-connection').onclick = function() { return false; };
+
+        // Bind new socket events
+        _socket.on('player_list', function (playersList) {
+            var nb = playersList.length,
+                i;
+
+            // Add this player in the list
+            for (i = 0; i <nb; i++) {
+                _playerManager.addPlayer(playersList[i], _userID);
+            };
+
+            // Redraw
+            draw(0, 0);
+        });
+        _socket.on('player_disconnect', function (player) {
+            _playerManager.removePlayer(player);
+        });
+        _socket.on('new_player', function (player) {
+            _playerManager.addPlayer(player);
+        });
+        _socket.on('player_ready_state', function (playerInfos) {
+            _playerManager.getPlayerFromId(playerInfos.id).updateFromServer(playerInfos);
+        });
+        _socket.on('update_game_state', function (gameState) {
+            changeGameState(gameState);
+        });
+        _socket.on('game_loop_update', function (serverDatasUpdated) {
+            _playerManager.updatePlayerListFromServer(serverDatasUpdated.players);
+            _pipeList = serverDatasUpdated.pipes;
+        });
+        _socket.on('ranking', function (score) {
+            displayRanking(score);
+        });
+
+        // Send nickname to the server
+        // console.log('Send nickname ' + nick);
+        _socket.emit('migrated', function (serverState, uuid) {
+            _userID = uuid;
+            changeGameState(serverState);
+
+            // Display a message according to the game state
+            if (serverState == enumState.OnGame) {
+                infoPanel(true, '<strong>Please wait</strong> for the previous game to finish...');
+            }
+            else {
+                // Display a little help text
+                if (_isTouchDevice == false)
+                    infoPanel(true, 'Press <strong>space</strong> to fly !', 3000);
+                else
+                    infoPanel(true, '<strong>Tap</strong> to fly !', 3000);
+            }
+        });
+
+        // Get input
+        if (_isTouchDevice == false) {
+            document.addEventListener('keydown', function (event) {
+                if (event.keyCode == 32) {
+                    inputsManager();
+                }
+            });
+        }
+        else {
+            var evt = window.navigator.msPointerEnabled ? 'MSPointerDown' : 'touchstart';
+            document.addEventListener(evt, inputsManager);
+        }
+
+        // Hide login screen
+        showHideMenu(enumPanels.Login, false);
+        return (false);
+    }
+
+
+  //  ----------------------------------End--------------------------------------------------
 
   function loadGameRoom () {
     var nick = document.getElementById('player-name').value;
