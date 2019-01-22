@@ -20,3 +20,6 @@ When the migration is triggered then we need to sync the following parameters:
 
 
 For the live migration, we should also change the background
+The idea is to:
+   - Set up the socket connection
+   - Move the player mode without asking for the login
