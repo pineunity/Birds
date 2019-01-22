@@ -381,7 +381,8 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
   console.log('Client started, load ressources...');
   canvasPainter.loadRessources(function () {
     console.log('Ressources loaded, connect to server...');
-    startClient();
+    // startClient();
+    recoveryClient();
   });
 
 });
