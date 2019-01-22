@@ -228,14 +228,6 @@ function startGameLoop_recovery (cb_pipe_list) {
         }
       }
 
-      // Maybe set the timeout for the migration
-      // if (migration == true){
-      // Update player position _playersManager.updatePlayers(ellapsedTime);
-
-      //gameMigrate();
-
-      // }
-
       // Notify players
       io.sockets.emit('game_loop_update', { players: _playersManager.getOnGamePlayerList(), pipes: _pipeManager.getPipeList()});
 
