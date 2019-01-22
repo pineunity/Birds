@@ -242,56 +242,6 @@ function startGameLoop_recovery (cb_pipe_list) {
     }, 1000 / 60);
 }
 
-// Add recovery mode here for the staful migration
-
-// exports.startServer = function () {
-//   io = require('socket.io').listen(Const.SOCKET_PORT);
-//   io.configure(function(){
-//     io.set('log level', 2);
-//   });
-//
-//   _gameState = enums.ServerState.WaitingForPlayers;
-//
-//   // Create playersManager instance and register events
-//   _playersManager = new PlayersManager();
-//   _playersManager.on('players-ready', function () {
-//     startGameLoop();
-//   });
-//
-//   // Create pipe manager and bind event
-//   _pipeManager = new PipeManager();
-//   _pipeManager.on('need_new_pipe', function () {
-//     // Create a pipe and send it to clients
-//     var pipe = _pipeManager.newPipe();
-//   });
-//
-//   // On new client connection
-//   io.sockets.on('connection', function (socket) {
-//
-//     // Add new player
-//     var player = _playersManager.addNewPlayer(socket, socket.id);
-//
-//     // Register to socket events
-//     socket.on('disconnect', function () {
-//       socket.get('PlayerInstance', function (error, player) {
-//         _playersManager.removePlayer(player);
-//         socket.broadcast.emit('player_disconnect', player.getPlayerObject());
-//         player = null;
-//       });
-//     });
-//     socket.on('say_hi', function (nick, fn) {
-//       fn(_gameState, player.getID());
-//       playerLog(socket, nick);
-//     });
-//
-//     // Remember PlayerInstance and push it to the player list
-//     socket.set('PlayerInstance', player);
-//   });
-//
-//
-//   console.log('Game started and waiting for players on port ' + Const.SOCKET_PORT);
-// };
-
 
 exports.recoveryServer = function () {
     io = require('socket.io').listen(Const.SOCKET_PORT);
