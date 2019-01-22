@@ -297,12 +297,6 @@ exports.recoveryServer = function () {
             playerLog(socket, player.getNick());
         });
 
-        // Not needed for the state migration
-        socket.on('say_hi', function (nick, fn) {
-            fn(_gameState, player.getID());
-            playerLog(socket, player.getNick());
-        });
-
         // Remember PlayerInstance and push it to the player list
         socket.set('PlayerInstance', player);
     });
