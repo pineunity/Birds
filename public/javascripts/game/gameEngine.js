@@ -15,7 +15,8 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
     Login: 'gs-login',
     Ranking: 'gs-ranking',
     HighScores: 'gs-highscores',
-    Error: 'gs-error'
+    Error: 'gs-error',
+    Migrating: 'player-connection'
   };
 
   var _gameState = enumState.Login,
@@ -113,8 +114,9 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
 
             // Draw bg and bind button click
             draw(0, 0);
-            showHideMenu(enumPanels.Login, false); // Hide the login screen
-            document.getElementById('player-connection').onclick = recoverGameRoom;
+            showHideMenu(enumPanels.Migrating, true); // Hide the login screen
+            // document.getElementById('player-connection').onclick = recoverGameRoom;
+            recoverGameRoom();
 
         });
 
@@ -127,23 +129,11 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
     }
 
     function recoverGameRoom () {
-        var nick = document.getElementById('player-name').value;
+        // var nick = document.getElementById('player-name').value;
 
-        // If nick is empty or if it has the default value,
-        if ((nick == '') || (nick == 'Player_1')) {
-            infoPanel(true, 'Please choose your <strong>name</strong> !', 2000);
-            document.getElementById('player-name').focus();
-            return (false);
-        }
-        // Else store it in sessionstorage if available
-        else {
-            if (typeof sessionStorage != 'undefined') {
-                sessionStorage.setItem('playerName', nick);
-            }
-        }
 
         // Unbind button event to prevent "space click"
-        document.getElementById('player-connection').onclick = function() { return false; };
+        // document.getElementById('player-connection').onclick = function() { return false; };
 
         // Bind new socket events
         _socket.on('player_list', function (playersList) {
