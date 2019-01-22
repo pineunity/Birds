@@ -79,6 +79,33 @@ PlayersManager.prototype.changeLobbyState = function (player, isReady) {
   this.emit('players-ready');
 };
 
+PlayersManager.prototype.changeMigrationState = function (player, is_migrated) {
+    var pos = _playersList.indexOf(player),
+        nbPlayers = _playersList.length,
+        i;
+
+    if (pos < 0) {
+        console.error("[ERROR] Can't find player in playerList");
+    }
+    else {
+        // Change ready state
+        _playersList[pos].setReadyState(is_migrated);
+    }
+
+    // PlayersManager check if players are ready
+    for (i = 0; i < nbPlayers; i++) {
+        // if at least one player doesn't ready, return
+        if (_playersList[i].getState() == enums.PlayerState.WaitingInLobby) {
+            console.info(_playersList[i].getNick() + " is not yet ready, don't start game");
+            return;
+        }
+    };
+
+    // else raise the start game event !
+    this.emit('players-ready');
+};
+
+
 PlayersManager.prototype.getPlayerList = function (specificState) {
   var players = new Array(),
       nbPlayers = _playersList.length,

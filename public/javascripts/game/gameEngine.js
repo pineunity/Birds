@@ -23,6 +23,7 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
       _playerManager,
       _pipeList,
       _isCurrentPlayerReady = false,
+      is_migrated = false,
       _userID = null,
       _lastTime = null,
       _rankingTimer,
@@ -309,7 +310,8 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
         _playerManager.getCurrentPlayer().updateReadyState(_isCurrentPlayerReady);
         break;
         case enumState.Migrating:
-            _socket.emit('change_migrating_state');
+            is_migrated = !is_migrated;
+            _socket.emit('change_migrating_state', is_migrated);
             break;
       case enumState.OnGame:
         _socket.emit('player_jump');

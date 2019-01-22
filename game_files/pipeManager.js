@@ -47,7 +47,7 @@ PipeManager.prototype.CallBackPipeList = function (cb_pipe_list){
       lastPos = FIRST_PIPE_POSX;
   var pipeListLen = cb_pipe_list.length;
   for (var i=0; i<pipeListLen; i++){
-    var pipe_info = cb_pipe_list.split("-");
+    var pipe_info = cb_pipe_list[i].split("-");
     cbPipe = new Pipe(lastPos);
     cbPipe.setPipe(pipe_info[0], pipe_info[1], pipe_info[2]);
     _pipeList.push(cbPipe);
