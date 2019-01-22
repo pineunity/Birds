@@ -35,15 +35,7 @@ function playerLog (socket, nick) {
       console.log(nick);
       // Set player's nickname and prepare him for the next game
       _playersManager.prepareNewPlayer(player, nick);
-      // Add Player information here - Update the posX and PosY for migration.
-      //  Update the bird location here is just when starting
 
-      // var playerObject = player.getPlayerObject();
-      // var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
-      // playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
-      //     if (err) console.log(err);
-      //     console.log("Successfully Written to playerManagerFile.");
-      // });
       // Notify new client about other players AND notify other about the new one ;)
       socket.emit('player_list', _playersManager.getPlayerList());
       socket.broadcast.emit('new_player', player.getPlayerObject());
@@ -298,6 +290,8 @@ exports.recoveryServer = function () {
                 player = null;
             });
         });
+        // socket.on('migrated'), function()
+
         // Not needed for the state migration
 
         // socket.on('say_hi', function (nick, fn) {
