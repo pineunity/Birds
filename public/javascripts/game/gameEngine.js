@@ -111,7 +111,7 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
       
       // Draw bg and bind button click
       draw(0, 0);
-      showHideMenu(enumPanels.Login, true);
+      // showHideMenu(enumPanels.Login, true);
       document.getElementById('player-connection').onclick = loadGameRoom;
   
     });
@@ -159,7 +159,7 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
 
             // Draw bg and bind button click
             draw(0, 0);
-            showHideMenu(enumPanels.Login, true);
+            // showHideMenu(enumPanels.Login, true);
             document.getElementById('player-connection').onclick = recoverGameRoom;
 
         });
