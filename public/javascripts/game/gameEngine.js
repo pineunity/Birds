@@ -124,6 +124,52 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
     
   }
 
+    // This func is used for live migration
+    function recoverClient () {
+        if (typeof io == 'undefined') {
+            document.getElementById('gs-error-message').innerHTML = 'Cannot retreive socket.io file at the address ' + Const.SOCKET_ADDR + '<br/><br/>Please provide a valid address.';
+            showHideMenu(enumPanels.Error, true);
+            console.log('Cannot reach socket.io file !');
+            return;
+        }
+
+        _playerManager = new PlayersManager();
+
+        document.getElementById('gs-loader-text').innerHTML = 'Connecting to the server...';
+        _socket = io.connect((Const.SOCKET_ADDR + ':' + Const.SOCKET_PORT), { reconnect: false });
+        _socket.on('connect', function() {
+
+            console.log('Connection established :)');
+
+            // Bind disconnect event
+            _socket.on('disconnect', function() {
+                document.getElementById('gs-error-message').innerHTML = 'Connection with the server lost';
+                showHideMenu(enumPanels.Error, true);
+                console.log('Connection with the server lost :( ');
+            });
+
+            // Try to retreive previous player name if exists
+            if (typeof sessionStorage != 'undefined') {
+                if ('playerName' in sessionStorage) {
+                    document.getElementById('player-name').value = sessionStorage.getItem('playerName');
+                }
+            }
+
+            // Draw bg and bind button click
+            draw(0, 0);
+            showHideMenu(enumPanels.Login, true);
+            document.getElementById('player-connection').onclick = recoverGameRoom;
+
+        });
+
+        _socket.on('error', function() {
+            document.getElementById('gs-error-message').innerHTML = 'Fail to connect the WebSocket to the server.<br/><br/>Please check the WS address.';
+            showHideMenu(enumPanels.Error, true);
+            console.log('Cannot connect the web_socket ');
+        });
+
+    }
+
   function loadGameRoom () {
     var nick = document.getElementById('player-name').value;
 
@@ -382,7 +428,7 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
   canvasPainter.loadRessources(function () {
     console.log('Ressources loaded, connect to server...');
     // startClient();
-    recoveryClient();
+    recoverClient();
   });
 
 });
