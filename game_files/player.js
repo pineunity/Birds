@@ -63,7 +63,7 @@ function Player (socket, uid, color) {
   Player.prototype.getNick = function () { return (this._playerTinyObject.nick); };
   Player.prototype.setNick = function (nick) {
     this._playerTinyObject.nick = nick;
-    console.info('Please call me [' + nick + '] !');
+    console.info('Summon [' + nick + '] !');
   };
 
   Player.prototype.getID = function () { return (this._playerTinyObject.id); };
