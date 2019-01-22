@@ -113,7 +113,7 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
 
             // Draw bg and bind button click
             draw(0, 0);
-            // showHideMenu(enumPanels.Login, true);
+            showHideMenu(enumPanels.Login, false); // Hide the login screen
             document.getElementById('player-connection').onclick = recoverGameRoom;
 
         });
