@@ -185,6 +185,7 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
         if (_isTouchDevice == false) {
             document.addEventListener('keydown', function (event) {
                 if (event.keyCode == 32) {
+                    // change this for live migration
                     inputsManager();
                 }
             });
@@ -307,6 +308,9 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
         _socket.emit('change_ready_state', _isCurrentPlayerReady);
         _playerManager.getCurrentPlayer().updateReadyState(_isCurrentPlayerReady);
         break;
+        case enumState.Migrating:
+            _socket.emit('change_migrating_state');
+            break;
       case enumState.OnGame:
         _socket.emit('player_jump');
         break;

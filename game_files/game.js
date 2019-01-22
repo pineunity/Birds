@@ -16,16 +16,18 @@ var _playersManager,
 function playerLog (socket, nick) {
   // Retreive PlayerInstance
   socket.get('PlayerInstance', function (error, player) {
-    if (error)
+      if (error)
       console.error(error);
     else {
 
       // Bind new client events
-      socket.on('change_ready_state', function (readyState) {
+      socket.on('change_migrating_state', function (readyState) {
+          console.log('I am here');
         // If the server is currently waiting for players, update ready state
         if (_gameState == enums.ServerState.OnGame) {
           //  This line is very imprtant since it will call the GameLoop in the RecoveryGame
           _playersManager.changeLobbyState(player, readyState);
+
           socket.broadcast.emit('player_ready_state', player.getPlayerObject());
         }
       });
@@ -264,7 +266,7 @@ exports.recoveryServer = function () {
     var cb_pipe_list = pipe_info.trim().split('\n');
     // console.log(pipe_list);
 
-    _gameState = enums.ServerState.OnGame;
+    _gameState = enums.ServerState.OnGame;   // This will be used for the changeState func in 'migrated event'
 
     //  Load player from file
 
