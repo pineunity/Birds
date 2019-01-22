@@ -30,3 +30,8 @@ The idea is to:
 Workflow:
 
 Socket in Start() -- > Migrated event ---> Change state --> Log --> Call some events --> Call back the Start()
+
+
+Note:
+Update only last three pipes
+Sync file: Lsyncd (Live Syncing Daemon)
