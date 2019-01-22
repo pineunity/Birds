@@ -266,7 +266,7 @@ exports.recoveryServer = function () {
     var cb_pipe_list = pipe_info.trim().split('\n');
     // console.log(pipe_list);
 
-    _gameState = enums.ServerState.OnGame;   // This will be used for the changeState func in 'migrated event'
+    _gameState = enums.ServerState.Migrating;   // This will be used for the changeState func in 'migrated event'
 
     //  Load player from file
 

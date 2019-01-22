@@ -25,3 +25,8 @@ expected sceen mode: After click the play button
 The idea is to:
    - Set up the socket connection
    - Move the player mode without asking for the login
+
+
+Workflow:
+
+Socket in Start() -- > Migrated event ---> Change state --> Log --> Call some events --> Call back the Start()
