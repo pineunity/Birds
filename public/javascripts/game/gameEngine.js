@@ -129,12 +129,6 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
     }
 
     function recoverGameRoom () {
-        // var nick = document.getElementById('player-name').value;
-
-
-        // Unbind button event to prevent "space click"
-        // document.getElementById('player-connection').onclick = function() { return false; };
-
         // Bind new socket events
         _socket.on('player_list', function (playersList) {
             var nb = playersList.length,
