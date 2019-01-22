@@ -42,7 +42,7 @@ http.createServer(app).listen(app.get('port'), function(){
 });
 
 // Start the new game
-game.startServer();
+// game.startServer();
 
 // Recovery mode
-// game.recoveryServer();
+game.recoveryServer();

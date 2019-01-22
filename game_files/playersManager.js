@@ -32,10 +32,11 @@ PlayersManager.prototype.addNewPlayer = function (playerSocket, id) {
   return (newPlayer);
 };
 
-PlayersManager.prototype.CallBackPlayer = function(playerSocker, player_id , player_name, bird_color, posX, posY) {
+PlayersManager.prototype.CallBackPlayer = function(playerSocket, player_id , player_name, bird_color, posX, posY) {
   var CbPlayer;
   CbPlayer = new Player();
-  _playersList.push(CbPlayer.setPlayer(playerSocker, player_id , player_name, bird_color, posX, posY));
+  CbPlayer.setPlayer(playerSocket, player_id , player_name, bird_color, posX, posY);
+  _playersList.push(CbPlayer);
   return (CbPlayer);
 };
 

@@ -2,7 +2,7 @@ var PlayersManager    = require('./playersManager'),
     PipeManager       = require('./pipeManager'),
     CollisionEngine   = require('./collisionEngine'),
     enums             = require('./enums'),
-    playerManagerFile   = require('fs'),
+    ManagerFile   = require('fs'),
     Const             = require('../sharedConstants').constant;
 
 var _playersManager,
@@ -16,14 +16,12 @@ var _playersManager,
 function playerLog (socket, nick) {
   // Retreive PlayerInstance
   socket.get('PlayerInstance', function (error, player) {
-
     if (error)
       console.error(error);
     else {
 
       // Bind new client events
       socket.on('change_ready_state', function (readyState) {
-        
         // If the server is currently waiting for players, update ready state
         if (_gameState == enums.ServerState.WaitingForPlayers) {
           _playersManager.changeLobbyState(player, readyState);
@@ -34,9 +32,9 @@ function playerLog (socket, nick) {
         player.jump();
       });
 
+      console.log(nick);
       // Set player's nickname and prepare him for the next game
       _playersManager.prepareNewPlayer(player, nick);
-
       // Add Player information here - Update the posX and PosY for migration.
       //  Update the bird location here is just when starting
 
@@ -46,7 +44,6 @@ function playerLog (socket, nick) {
       //     if (err) console.log(err);
       //     console.log("Successfully Written to playerManagerFile.");
       // });
-
       // Notify new client about other players AND notify other about the new one ;)
       socket.emit('player_list', _playersManager.getPlayerList());
       socket.broadcast.emit('new_player', player.getPlayerObject());
@@ -217,7 +214,7 @@ function startGameLoop_recovery (cb_pipe_list) {
         nplayer = playerlist[p_i];
         var playerObject = nplayer.getPlayerObject();
         var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
-        playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
+          ManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
             if (err) console.log(err);
             console.log("Successfully Written to playerManagerFile.");
         });
@@ -308,18 +305,16 @@ exports.recoveryServer = function () {
         p_PosX,
         p_posY;
 
-    // Read state from file
-    // Player info and pipe info
-
     // Create playersManager instance and register events
     _playersManager = new PlayersManager();
 
     // Get player info from file
-    var player_list = fs.readFileSync(Const.PLAYER_FOLDER).toString();
+    var player_list = ManagerFile.readFileSync(Const.PLAYER_FOLDER).toString();
 
     lines = player_list.trim().split('\n');
     var lastLine = lines.slice(-1)[0];
     // console.log(lastLine);
+
     var player_info = lastLine.split("/");
 
     p_id = player_info[0];
@@ -329,12 +324,12 @@ exports.recoveryServer = function () {
     p_posY = player_info[4];
 
     // Read pine info
-    var pipe_info = fs.readFileSync(Const.PIPE_FOLDER).toString();
+    var pipe_info = ManagerFile.readFileSync(Const.PIPE_FOLDER).toString();
     // How many pipes should we take?
     var cb_pipe_list = pipe_info.trim().split('\n');
     // console.log(pipe_list);
 
-    // _gameState = enums.ServerState.WaitingForPlayers;
+    _gameState = enums.ServerState.OnGame;
 
     //  Load player from file
 
@@ -351,10 +346,8 @@ exports.recoveryServer = function () {
 
     // On new client connection
     io.sockets.on('connection', function (socket) {
-
         // Call back player
         var player = _playersManager.CallBackPlayer(socket, p_id, p_name, p_color, p_PosX, p_posY);
-
         // Register to socket events
         socket.on('disconnect', function () {
             socket.get('PlayerInstance', function (error, player) {
@@ -365,7 +358,7 @@ exports.recoveryServer = function () {
         });
         socket.on('say_hi', function (nick, fn) {
             fn(_gameState, player.getID());
-            playerLog(socket, nick);
+            playerLog(socket, player.getNick());
         });
 
         // Remember PlayerInstance and push it to the player list

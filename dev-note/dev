@@ -17,3 +17,6 @@ When the migration is triggered then we need to sync the following parameters:
 
 
 - The bird actually does not move, only the background move
+
+
+For the live migration, we should also change the background
