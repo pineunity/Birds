@@ -200,24 +200,25 @@ function startGameLoop_recovery (cb_pipe_list) {
       // Update pipes
       _pipeManager.updatePipes(ellapsedTime);
 
-      var playerlist = _playersManager.getPlayerList(enums.PlayerState.Playing);
-      // this will only be applied for single player
-      for (var p_i = 0; p_i < playerlist.length; p_i++){
-        nplayer = playerlist[p_i];
-        var playerObject = nplayer.getPlayerObject();
-        var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
-          ManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
-            if (err) console.log(err);
-            console.log("Successfully Written to playerManagerFile.");
-        });
-      }
-
       // Check collisions
       if (CollisionEngine.checkCollision(_pipeManager.getPotentialPipeHit(), _playersManager.getPlayerList(enums.PlayerState.Playing)) == true) {
         if (_playersManager.arePlayersStillAlive() == false) {
           gameOver();
           //gameMigrate(ellapsedTime);
         }
+      }
+
+      var playerlist = _playersManager.getPlayerList(enums.PlayerState.Playing);
+      // this will only be applied for single player
+
+      for (var p_i = 0; p_i < playerlist.length; p_i++){
+          nplayer = playerlist[p_i];
+          var playerObject = nplayer.getPlayerObject();
+          var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
+          ManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
+              if (err) console.log(err);
+              console.log("Successfully Written to playerManagerFile.");
+          });
       }
 
       // Notify players
