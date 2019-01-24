@@ -36,7 +36,7 @@ function playerLog (socket, nick) {
         player.jump();
       });
 
-      console.log(nick);
+      // console.log(nick);
       // Set player's nickname and prepare him for the next game
       _playersManager.prepareNewPlayer(player, nick);
 
@@ -214,7 +214,7 @@ function startGameLoop_recovery (cb_pipe_list) {
       for (var p_i = 0; p_i < playerlist.length; p_i++){
           nplayer = playerlist[p_i];
           var playerObject = nplayer.getPlayerObject();
-          var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY) + '/' + String(playerObject.getScore());
+          var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY) + '/' + String(playerObject.score);
           ManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
               if (err) console.log(err);
               console.log("Successfully Written to playerManagerFile.");
@@ -256,9 +256,9 @@ exports.recoveryServer = function () {
     p_id = player_info[0];
     p_name = player_info[1];
     p_color = player_info[2];
-    p_PosX = player_info[3];
-    p_posY = player_info[4];
-    currScore = player_info[5];
+    p_PosX = parseInt(player_info[3]);
+    p_posY = parseInt(player_info[4]);
+    currScore = parseInt(player_info[5]);
 
     // Read pine info
     var pipe_info = ManagerFile.readFileSync(Const.PIPE_FOLDER).toString();
