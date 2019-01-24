@@ -34,7 +34,7 @@ PipeManager.prototype.newPipe = function () {
   newPipe = new Pipe(lastPos);
   _pipeList.push(newPipe);
   //Save the lastPos into a file
-  var combPipeInfo = newPipe.getPipeObject().id + '-' + String(newPipe.getPipeObject().posX) + '-' + String(newPipe.getPipeObject().posY);
+  var combPipeInfo = newPipe.getPipeObject().id + '-' + String(newPipe.getPipeObject().posX - Const.REV_OFFSET) + '-' + String(newPipe.getPipeObject().posY);
   pipeManagerFile.appendFile(Const.PIPE_FOLDER, combPipeInfo + '\r\n', function(err){
       if (err) console.log(err);
       console.log("Successfully Written to pipeManagerFile.");
@@ -48,8 +48,12 @@ PipeManager.prototype.CallBackPipeList = function (cb_pipe_list){
   var pipeListLen = cb_pipe_list.length;
   for (var i=0; i<pipeListLen; i++){
     var pipe_info = cb_pipe_list[i].split("-");
+    if (i > 0){
+        lastPos = _pipeList[i-1].getPipeObject().posX;
+    }
     cbPipe = new Pipe(lastPos);
-    cbPipe.setPipe(pipe_info[0], pipe_info[1], pipe_info[2]);
+    var est_posX = lastPos + Const.DISTANCE_BETWEEN_PIPES;
+    cbPipe.setPipe(pipe_info[0], est_posX, pipe_info[2]);
     _pipeList.push(cbPipe);
   }
   return (_pipeList);

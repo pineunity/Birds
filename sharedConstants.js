@@ -20,6 +20,7 @@ var constant = {
   MIN_PIPE_HEIGHT:          60,
   MAX_PIPE_HEIGHT:          630,
   HEIGHT_BETWEEN_PIPES:     150,
+  REV_OFFSET: 50,
   PIPE_FOLDER: '/home/pine/00-bitbucket_comnets/nokia-mec-service-migration/stateful/state/pipe.txt',
   PLAYER_FOLDER: '/home/pine/00-bitbucket_comnets/nokia-mec-service-migration/stateful/state/player.txt'
 };
