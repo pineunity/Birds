@@ -170,19 +170,7 @@ function startGameLoop_recovery (cb_pipe_list) {
     // Change server state
     updateGameState(enums.ServerState.OnGame, true);
     // Create the first pipe
-
-    // _pipeManager.newPipe(); // change it
-
     _pipeManager.CallBackPipeList(cb_pipe_list);
-
-
-    // var pipeListTest = _pipeManager.getPipeList();
-    // var pipeLen = pipeListTest.length;
-    // console.log('Get pipe info');
-    // for (var i=0; i< pipeLen;i++){
-    //     console.log(pipeListTest[i].posY);
-    // }
-    // console.log(_pipeManager.getPipeList().length);
     // Start timer
     _timer = setInterval(function() {
       var now = new Date().getTime(),
