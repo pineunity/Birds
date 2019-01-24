@@ -48,12 +48,16 @@ PipeManager.prototype.CallBackPipeList = function (cb_pipe_list){
   var pipeListLen = cb_pipe_list.length;
   for (var i=0; i<pipeListLen; i++){
     var pipe_info = cb_pipe_list[i].split("-");
-    if (i > 0){
-        lastPos = _pipeList[i-1].getPipeObject().posX;
-    }
+    // if (i > 0){
+    //     lastPos = _pipeList[i-1].getPipeObject().posX;
+    //     console.log('Show last pos');
+    //     console.log(lastPos);
+    // }
     cbPipe = new Pipe(lastPos);
     var est_posX = lastPos + Const.DISTANCE_BETWEEN_PIPES;
     cbPipe.setPipe(pipe_info[0], est_posX, pipe_info[2]);
+    lastPos = est_posX;
+    console.log(lastPos);
     _pipeList.push(cbPipe);
   }
   return (_pipeList);
