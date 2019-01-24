@@ -128,7 +128,7 @@ function Player (socket, uid, color) {
     }
   };
 
-  Player.prototype.setPlayer = function (socket, id, name, bird_color, posX, posY){
+  Player.prototype.setPlayer = function (socket, id, name, bird_color, posX, posY, currScore){
       this._socket = socket;
       this._speedY    = 0;
       this._rank      = 1;
@@ -138,6 +138,7 @@ function Player (socket, uid, color) {
       this._playerTinyObject.color = bird_color;
       this._playerTinyObject.posX = posX;
       this._playerTinyObject.posY = posY;
+      this._playerTinyObject.score = currScore;
   };
 
   Player.prototype.sendScore = function (NBPlayers, HighScores) {
