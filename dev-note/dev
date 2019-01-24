@@ -25,6 +25,7 @@ expected sceen mode: After click the play button
 The idea is to:
    - Set up the socket connection
    - Move the player mode without asking for the login
+   - After recovery, update the correct location of the pipes
 
 
 Workflow:
