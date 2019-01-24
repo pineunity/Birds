@@ -98,7 +98,7 @@ PipeManager.prototype.getPotentialPipeHit = function () {
       nbPipes = _pipeList.length,
       i;
 
-  // In multiplayer mode, just check the first 2 pipes
+  // In multi-player mode, just check the first 2 pipes
   // because the other ones are too far from the players
   if (nbPipes > MAX_PIPE_CHECK_COLLISION)
     nbPipes = MAX_PIPE_CHECK_COLLISION;

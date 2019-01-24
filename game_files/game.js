@@ -171,7 +171,7 @@ function startGameLoop_recovery (cb_pipe_list) {
     updateGameState(enums.ServerState.OnGame, true);
     // Create the first pipe
 
-    _pipeManager.newPipe(); // change it
+    // _pipeManager.newPipe(); // change it
 
     _pipeManager.CallBackPipeList(cb_pipe_list);
 
