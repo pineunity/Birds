@@ -238,7 +238,8 @@ exports.recoveryServer = function () {
         p_name,
         p_color,
         p_PosX,
-        p_posY;
+        p_posY,
+        currScore;
 
     // Create playersManager instance and register events
     _playersManager = new PlayersManager();
@@ -257,6 +258,7 @@ exports.recoveryServer = function () {
     p_color = player_info[2];
     p_PosX = player_info[3];
     p_posY = player_info[4];
+    currScore = player_info[5];
 
     // Read pine info
     var pipe_info = ManagerFile.readFileSync(Const.PIPE_FOLDER).toString();
@@ -283,7 +285,7 @@ exports.recoveryServer = function () {
     // On new client connection
     io.sockets.on('connection', function (socket) {
         // Call back player
-        var player = _playersManager.CallBackPlayer(socket, p_id, p_name, p_color, p_PosX, p_posY);
+        var player = _playersManager.CallBackPlayer(socket, p_id, p_name, p_color, p_PosX, p_posY, currScore);
         // Register to socket events
         socket.on('disconnect', function () {
             socket.get('PlayerInstance', function (error, player) {
