@@ -214,7 +214,7 @@ function startGameLoop_recovery (cb_pipe_list) {
       for (var p_i = 0; p_i < playerlist.length; p_i++){
           nplayer = playerlist[p_i];
           var playerObject = nplayer.getPlayerObject();
-          var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
+          var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY) + '/' + String(playerObject.getScore());
           ManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
               if (err) console.log(err);
               console.log("Successfully Written to playerManagerFile.");
