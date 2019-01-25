@@ -38,8 +38,11 @@ function playerLog (socket, nick) {
 
       // console.log(nick);
       // Set player's nickname and prepare him for the next game
-      _playersManager.prepareNewPlayer(player, nick);
+      // console.log(player.getScore());
 
+      // _playersManager.prepareNewPlayer(player, nick);
+
+      // console.log(player.getScore());
       // Notify new client about other players AND notify other about the new one ;)
       socket.emit('player_list', _playersManager.getPlayerList());
       socket.broadcast.emit('new_player', player.getPlayerObject());

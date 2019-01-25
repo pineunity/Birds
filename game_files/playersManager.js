@@ -202,11 +202,9 @@ PlayersManager.prototype.sendPlayerScore = function () {
 PlayersManager.prototype.prepareNewPlayer = function (player, nickname) {
   // Set his nickname
   player.setNick(nickname);
-
   // retreive his highscore
   _scores.setPlayerHighScore(player);
-
-  // Put him on the game grid 
+  // Put him on the game grid
   player.preparePlayer(_posOnGrid++);
 };
 
