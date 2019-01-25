@@ -120,58 +120,6 @@ function gameOver() {
   setTimeout(createNewGame, Const.TIME_BETWEEN_GAMES);
 };
 
-
-function gameRecovery(ellapsedTime) {
-    var players,
-        i;
-
-    // Update pipe list
-    _pipeManager.updatePipes(ellapsedTime);
-
-    _playersManager.updatePlayers(ellapsedTime);
-    lenPlaysers =_playersManager.getPlayerList(enums.PlayerState.Playing);
-    // Reset players state and send it
-    // players = _playersManager.resetPlayersForNewGame();
-    for (i = 0; i < lenPlaysers; i++) {
-        io.sockets.emit('player_ready_state', players[i]);
-    };
-
-    // Notify players of the restored game state
-    updateGameState(enums.ServerState.OnGame, true);
-}
-
-function gameMigrate(ellapsedTime){
-  //This function will run in the loop, so state would be saved for the each time frame
-
-  // Change server state
-  // updateGameState(enums.ServerState.Migrating, true);
-  // do something here util the state is back to OnGame
-
-  // Transfer the require state to the destination
-  // updateGameState(enums.ServerState.OnGame, true)
-  // show the time here
-
-  var players,
-      i;
-
-  // Stop game loop
-  clearInterval(_timer);
-  _lastTime = null;
-
-  // Change server state
-  updateGameState(enums.ServerState.Ranking, true);
-
-  // Send players score
-  _playersManager.sendPlayerScore();
-
-  //First step is to try to make it recover
-  //  After 5s, recover the game
-  setTimeout(gameRecovery(ellapsedTime), Const.TIME_BETWEEN_GAMES);
-  // After 5s, create a new game
-  // setTimeout(createNewGame, Const.TIME_BETWEEN_GAMES);
-
-}
-
 function startGameLoop () {
   // Change server state
   updateGameState(enums.ServerState.OnGame, true);
@@ -207,18 +155,6 @@ function startGameLoop () {
     // Update pipes
     _pipeManager.updatePipes(ellapsedTime);
 
-    var playerlist = _playersManager.getPlayerList(enums.PlayerState.Playing);
-    // this will only be applied for single player
-    for (var p_i = 0; p_i < playerlist.length; p_i++){
-      nplayer = playerlist[p_i];
-      var playerObject = nplayer.getPlayerObject();
-      var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY);
-      playerManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
-          if (err) console.log(err);
-          console.log("Successfully Written to playerManagerFile.");
-      });
-    }
-
     // Check collisions
     if (CollisionEngine.checkCollision(_pipeManager.getPotentialPipeHit(), _playersManager.getPlayerList(enums.PlayerState.Playing)) == true) {
       if (_playersManager.arePlayersStillAlive() == false) {
@@ -227,13 +163,18 @@ function startGameLoop () {
       }
     }
 
-    // Maybe set the timeout for the migration
-    // if (migration == true){
-    // Update player position _playersManager.updatePlayers(ellapsedTime);
+    var playerlist = _playersManager.getPlayerList(enums.PlayerState.Playing);
+    // this will only be applied for single player
 
-    //gameMigrate();
-
-    // }
+    for (var p_i = 0; p_i < playerlist.length; p_i++){
+        nplayer = playerlist[p_i];
+        var playerObject = nplayer.getPlayerObject();
+        var combPlayerInfo = playerObject.id + '/' + playerObject.nick + '/' +  playerObject.color + '/' + String(playerObject.posX) + '/' + String(playerObject.posY) + '/' + String(playerObject.score);
+        ManagerFile.appendFile(Const.PLAYER_FOLDER, combPlayerInfo + '\r\n', function(err){
+            if (err) console.log(err);
+            console.log("Successfully Written to playerManagerFile.");
+        });
+    }
 
     // Notify players
     io.sockets.emit('game_loop_update', { players: _playersManager.getOnGamePlayerList(), pipes: _pipeManager.getPipeList()});
