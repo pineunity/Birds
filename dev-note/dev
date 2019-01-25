@@ -37,3 +37,55 @@ Socket in Start() -- > Migrated event ---> Change state --> Log --> Call some ev
 Note:
 Update only last three pipes
 Sync file: Lsyncd (Live Syncing Daemon)
+----------------------------------------------------------
+
+Step to setup lsyncd:
+
+On the edge 1:
+
+- copy ssh key to edge 2:
+ssh-copy-id ...
+
+- instal lsyncd:
+sudo apt-get update
+sudo apt-get install -y lsyncd
+
+
+- Create repo for state (for edge 2 as well):
+
+mkdir ../flappybird/state
+
+
+- Create log repo for lsyncd:
+
+sudo mkdir /var/log/lsyncd
+touch /var/log/lsyncd/lsyncd.{log,status}
+
+
+- Create conf. file for lsyncd:
+
+sudo mkdir /etc/lsyncd
+
+sudo nano /etc/lsyncd/lsyncd.conf.lua
+
+- Add following lines in the above conf. file:
+
+settings = {
+        insist = true,
+        logfile = "/var/log/lsyncd/lsyncd.log",
+        statusFile = "/var/log/lsyncd/lsyncd.status"
+}
+
+sync {
+        default.rsyncssh,
+        source = "/home/..../state",
+        host = "edge2@192.168.0.9",
+        targetdir = "/home/..../state",
+        rsync = {
+         rsh = "ssh -i /home/.../.ssh/id_rsa -o UserKnownHostsFile=/home/.../.ssh/known_hosts"
+        }
+}
+
+- Restart lsyncd:
+
+sudo service lsyncd restart
