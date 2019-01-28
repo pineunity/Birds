@@ -267,7 +267,18 @@ exports.recoveryServer = function () {
     var pipe_info = ManagerFile.readFileSync(Const.PIPE_FOLDER).toString();
     // How many pipes should we take?
     var cb_pipe_list = pipe_info.trim().split('\n');
-    // console.log(cb_pipe_list);
+    // console.log(cb_pipe_list.length);
+    //Limit the pipe list
+
+    var selected_cbpipe_list;
+    var rc_pipe_len = cb_pipe_list.length;
+    if (rc_pipe_len <= Const.MAX_RC_PIPE_LENGTH)  {
+        selected_cbpipe_list = cb_pipe_list.slice(-rc_pipe_len);
+    }
+    else {
+        selected_cbpipe_list = cb_pipe_list.slice(-Const.MAX_RC_PIPE_LENGTH);
+    }
+    // console.log(cb_pipe_list.slice(-3));
 
     _gameState = enums.ServerState.Migrating;   // This will be used for the changeState func in 'migrated event'
 
@@ -275,7 +286,7 @@ exports.recoveryServer = function () {
 
     _playersManager.on('players-ready', function () {
         // console.log('I am here');
-        startGameLoop_recovery(cb_pipe_list);
+        startGameLoop_recovery(selected_cbpipe_list);
     });
 
     // Create pipe manager and bind event
