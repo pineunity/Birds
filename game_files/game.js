@@ -2,7 +2,7 @@ var PlayersManager    = require('./playersManager'),
     PipeManager       = require('./pipeManager'),
     CollisionEngine   = require('./collisionEngine'),
     enums             = require('./enums'),
-    playerManagerFile   = require('fs'),
+    ManagerFile   = require('fs'),
     Const             = require('../sharedConstants').constant;
 
 var _playersManager,
