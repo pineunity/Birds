@@ -90,17 +90,20 @@ require(['canvasPainter', 'playersManager', '../../sharedConstants'], function (
     _playerManager = new PlayersManager();
 
     document.getElementById('gs-loader-text').innerHTML = 'Connecting to the server...';
-    _socket = io.connect((Const.SOCKET_ADDR + ':' + Const.SOCKET_PORT), { reconnect: false });
+    _socket = io.connect((Const.SOCKET_ADDR + ':' + Const.SOCKET_PORT), { reconnect: true });
     _socket.on('connect', function() {
       
       console.log('Connection established :)');
       
       // Bind disconnect event
-      _socket.on('disconnect', function() {
-        document.getElementById('gs-error-message').innerHTML = 'Connection with the server lost';
-        showHideMenu(enumPanels.Error, true);
-        console.log('Connection with the server lost :( ');
-      });
+    _socket.on('disconnect', function() {
+        setTimeout(function () {
+                document.getElementById('gs-error-message').innerHTML = 'Connection with the server lost';
+                showHideMenu(enumPanels.Error, true);
+                console.log('Connection with the server lost :( ');
+            },10000);
+
+    });
 
       // Try to retreive previous player name if exists
       if (typeof sessionStorage != 'undefined') {
