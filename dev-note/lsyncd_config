@@ -1,0 +1,24 @@
+# Source VM
+
+settings = {
+        insist = true,
+        logfile = "/var/log/lsyncd/lsyncd.log",
+        statusFile = "/var/log/lsyncd/lsyncd.status"
+}
+
+sync {
+        default.rsyncssh,
+        source = "/home/ubuntu/flappybird",
+        host = "edge-test@192.168.1.5",
+        targetdir = "/home/edge-test/flappybird",
+        delay = 1,
+        rsync = {
+         rsh = "ssh -i /home/ubuntu/.ssh/id_rsa -o UserKnownHostsFile=/home/ubuntu/.ssh/known_hosts"
+        }
+}
+
+
+
+# Dest VM
+
+

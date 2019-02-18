@@ -1,5 +1,14 @@
 for tracking the state using console in javascript
 
+
+The stateful migration is performed by the following steps:
+
+- Captured and saved the state
+
+- Sync state between source and destination
+
+- Recovery from the state file
+
 When the migration is triggered then we need to sync the following parameters:
 - the kind of bird (color)
 - the position of the bird
@@ -8,3 +17,99 @@ When the migration is triggered then we need to sync the following parameters:
 
 
 - The bird actually does not move, only the background move
+
+
+For the live migration, we should also change the background
+expected sceen mode: After click the play button
+
+The idea is to:
+   - Set up the socket connection
+   - Move the player mode without asking for the login
+   - After recovery, update the correct location of the pipes since posX is already changed
+   - PosX will be nearly same
+
+
+Workflow:
+
+Socket in Start() -- > Migrated event ---> Change state --> Log --> Call some events --> Call back the Start()
+
+
+Note:
+Update only last three pipes
+Sync file: Lsyncd (Live Syncing Daemon)
+----------------------------------------------------------
+
+Step to setup lsyncd:
+
+On the edge 1:
+
+- copy ssh key to edge 2:
+ssh-copy-id ...
+
+- instal lsyncd:
+sudo apt-get update
+sudo apt-get install -y lsyncd
+
+
+- Create repo for state (for edge 2 as well):
+
+mkdir ../flappybird/state
+
+
+- Create log repo for lsyncd:
+
+sudo mkdir /var/log/lsyncd
+touch /var/log/lsyncd/lsyncd.{log,status}
+
+
+- Create conf. file for lsyncd:
+
+sudo mkdir /etc/lsyncd
+
+sudo nano /etc/lsyncd/lsyncd.conf.lua
+
+- Add following lines in the above conf. file:
+
+settings = {
+        insist = true,
+        logfile = "/var/log/lsyncd/lsyncd.log",
+        statusFile = "/var/log/lsyncd/lsyncd.status"
+}
+
+sync {
+        default.rsyncssh,
+        source = "/home/..../state",
+        host = "edge2@192.168.0.9",
+        targetdir = "/home/..../state",
+        rsync = {
+         rsh = "ssh -i /home/.../.ssh/id_rsa -o UserKnownHostsFile=/home/.../.ssh/known_hosts"
+        }
+}
+
+"ssh -i /home/edge-test/clone-app -o UserKnownHostsFile=/home/edge-test/.ssh/known_hosts"
+
+- Restart lsyncd:
+
+sudo service lsyncd restart
+
+
+- Some trick:
+
+Avoid long respone ssh: Edit UseDns No in ssh_config: etc/ssh/sshd_config
+Use sshpass for lua config between controller and VM on the destination
+
+Monitoring traffic from specific interface:
+sudo iftop -i br0 -f "host 192.168.1.4"
+
+Clone another VM -- migrated to dest - pause cloned VM
+Migration: Pause VM on source and resume VM on dest
+
+
+
+
+
+
+sudo iftop -i br0 -f "host 192.168.1.5"
+
+
+
